@@ -5,10 +5,9 @@
  * @package sfEbayPlugin
  * @author Jonathan H. Wage
  */
-class BasesfEbay extends SoapClient
+class BasesfEbay
 {
-  protected $_wsdl         =   null,
-	          $_token        =   null,
+  protected $_token        =   null,
 	          $_devId        =   null,
 	          $_appId        =   null,
 	          $_certId       =   null,
@@ -26,15 +25,12 @@ class BasesfEbay extends SoapClient
    * @param string $_certId 
    * @return void
    */
-	public function __construct($_wsdl, $_token, $_devId, $_appId, $_certId)
+	public function __construct($_token, $_devId, $_appId, $_certId)
 	{	
-		$this->_wsdl = $_wsdl;
 		$this->_token = $_token;
 		$this->_devId = $_devId;
 		$this->_appId = $_appId;
 		$this->_certId = $_certId;
-		
-		parent::__construct($this->_wsdl, array('trace' => 1));
 	}
 
   /**
@@ -84,11 +80,22 @@ class BasesfEbay extends SoapClient
 		$params[0]['Version'] = (isset($params[0]['Version']) && $params[0]['Version']) ? $params[0]['Version']:530; 
 		$params[0]['SiteId'] = (isset($params[0]['SiteId']) && $params[0]['SiteId']) ? $params[0]['SiteId']:0;
 		
-		$queryString = http_build_query(array('callname' => $function, 'siteid' => $params[0]['SiteId'], 'version' => $params[0]['Version'], 'appid' => $this->_appId, 'Routing' => 'default'), '', '&');
+		$query['callname'] = $function;
+		$query['siteid'] = $params[0]['SiteId'];
+		$query['version'] = $params[0]['Version'];
+		$query['appid'] = $this->_appId;
+		$query['Routing'] = 'Default';
+		$query['IncludeSelector'] = 'Items';
+		
+		$query = array_merge_recursive($query, $params[0]);
+		
+		$queryString = http_build_query($query, '', '&');
 	 	$location = $this->getLocation() . "?" . $queryString;
-	 	
- 		$result = $this->__soapCall($function, $params, array('location' => $location), $headers);
- 	  
- 	  return $result;
+
+ 		$contents = file_get_contents($location);
+ 		
+ 		$xml = new SimpleXMLElement($contents);
+ 		
+ 		return $xml;
  	}
 }

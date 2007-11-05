@@ -26,6 +26,6 @@ class sfEbay extends BasesfEbay
    */
 	public function __construct($_token, $_devId, $_appId, $_certId)
 	{
-		parent::__construct('http://developer.ebay.com/webservices/latest/eBaySvc.wsdl', $_token, $_devId, $_appId, $_certId);
+		parent::__construct($_token, $_devId, $_appId, $_certId);
 	}
 }
