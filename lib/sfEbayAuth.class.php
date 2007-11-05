@@ -1,13 +1,28 @@
 <?php
+/**
+ * sfEbayAuth
+ *
+ * @package sfEbayPlugin
+ * @author Jonathan H. Wage
+ */
 class sfEbayAuth
 {
-	private $eBayAuthToken;
-	private $Credentials;
+	protected $_eBayAuthToken,
+	          $_Credentials;
 
-	public function __construct($token, $appId, $devId, $certId)
+  /**
+   * __construct
+   *
+   * @param string $_token 
+   * @param string $_appId 
+   * @param string $_devId 
+   * @param string $_certId 
+   * @return void
+   */
+	public function __construct($_token, $_appId, $_devId, $_certId)
 	{
-		$credentials = new sfEbayCredentials($appId, $devId, $certId);
-		$this->eBayAuthToken = new SoapVar($token, XSD_STRING,	null, null, null, 'urn:ebay:apis:eBLBaseComponents');
-		$this->Credentials = new SoapVar($credentials, SOAP_ENC_OBJECT, null, null, null, 'urn:ebay:apis:eBLBaseComponents');
+		$credentials = new sfEbayCredentials($_appId, $_devId, $_certId);
+		$this->_eBayAuthToken = new SoapVar($_token, XSD_STRING,	null, null, null, 'urn:ebay:apis:eBLBaseComponents');
+		$this->_Credentials = new SoapVar($credentials, SOAP_ENC_OBJECT, null, null, null, 'urn:ebay:apis:eBLBaseComponents');
 	}
 }
