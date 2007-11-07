@@ -73,10 +73,6 @@ class BasesfEbay
    */
  	public function __call($function, $params)
  	{
- 	  $eBayAuth = new sfEbayAuth($this->_token, $this->_appId, $this->_devId, $this->_certId);
-		$headerBody = new SoapVar($eBayAuth, SOAP_ENC_OBJECT);
-		$headers = array(new SoapHeader('urn:ebay:apis:eBLBaseComponents', 'RequesterCredentials', $headerBody));
-		
 		$params[0]['Version'] = (isset($params[0]['Version']) && $params[0]['Version']) ? $params[0]['Version']:530; 
 		$params[0]['SiteId'] = (isset($params[0]['SiteId']) && $params[0]['SiteId']) ? $params[0]['SiteId']:0;
 		
